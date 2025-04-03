@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { CalendarDays, Users } from "lucide-react"
 import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
+import { getBadgeStatusColor } from "@/utils/statusColors"
 
 export default async function ProjectList() {
   const projects = await getProjects()
@@ -11,8 +12,8 @@ export default async function ProjectList() {
   if (projects.length === 0) {
     return (
       <div className="text-center py-10">
-        <h3 className="text-lg font-medium mb-2">No projects found</h3>
-        <p className="text-muted-foreground">Create your first project to get started.</p>
+        <h3 className="text-lg font-medium mb-2">Sem projetos</h3>
+        <p className="text-muted-foreground">Crie seu primeiro projeto para iniciar</p>
       </div>
     )
   }
@@ -25,7 +26,7 @@ export default async function ProjectList() {
             <CardHeader>
               <div className="flex justify-between items-start">
                 <CardTitle className="text-xl">{project.name}</CardTitle>
-                <Badge variant={getStatusVariant(project.status)}>{project.status}</Badge>
+                <Badge className={`${getBadgeStatusColor(project.status)} dark:text-white transition-all`} variant={getStatusVariant(project.status)}>{project.status}</Badge>
               </div>
               <CardDescription>{project.description}</CardDescription>
             </CardHeader>
@@ -33,21 +34,21 @@ export default async function ProjectList() {
               <div className="space-y-2">
                 <div className="flex items-center text-sm text-muted-foreground">
                   <Users className="mr-2 h-4 w-4" />
-                  {project.memberCount} members
+                  {project.memberCount} membros
                 </div>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <CalendarDays className="mr-2 h-4 w-4" />
-                  Updated {formatDistanceToNow(new Date(project.updatedAt), { addSuffix: true })}
+                  Atualizado há {formatDistanceToNow(new Date(project.updatedAt), { addSuffix: true })}
                 </div>
               </div>
             </CardContent>
             <CardFooter>
               <div className="w-full bg-gray-100 rounded-full h-2.5">
-                <div className="bg-primary h-2.5 rounded-full" style={{ width: `${project.progress}%` }}></div>
+                <div className="bg-primary dark:bg-blue-300 h-2.5 rounded-full " style={{ width: `${project.progress}%` }}></div>
               </div>
             </CardFooter>
           </Card>
-        </Link>
+        </Link> 
       ))}
     </div>
   )
@@ -56,13 +57,12 @@ export default async function ProjectList() {
 function getStatusVariant(status: string) {
   switch (status.toLowerCase()) {
     case "active":
-      return "default"
+      return "outline"
     case "completed":
-      return "success"
+      return "secondary"
     case "on hold":
-      return "warning"
+      return "destructive"
     default:
       return "secondary"
   }
 }
-

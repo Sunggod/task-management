@@ -12,41 +12,41 @@ export default function NewProjectPage() {
     <main className="container max-w-2xl mx-auto py-8 px-4">
       <Card>
         <CardHeader>
-          <CardTitle>Create New Project</CardTitle>
-          <CardDescription>Add a new project to start organizing your tasks.</CardDescription>
+          <CardTitle>Criar novo projeto</CardTitle>
+          <CardDescription>Adicione um novo projeto para começar a organizar suas tarefas.</CardDescription>
         </CardHeader>
         <form action={createProject}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Project Name</Label>
-              <Input id="name" name="name" placeholder="Enter project name" required />
+              <Label htmlFor="name">Nome do projeto</Label>
+              <Input id="name" name="name" placeholder="Digite o nome do projeto" required />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea id="description" name="description" placeholder="Enter project description" rows={4} />
+              <Label htmlFor="description">Descrição</Label>
+              <Textarea id="description" name="description" placeholder="Digite a descrição do projeto" rows={4} />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
               <Select name="status" defaultValue="active">
                 <SelectTrigger>
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder="Selecione o status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="planning">Planning</SelectItem>
-                  <SelectItem value="on hold">On Hold</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="active">Ativo</SelectItem>
+                  <SelectItem value="planning">Planejando</SelectItem>
+                  <SelectItem value="on hold">Em espera</SelectItem>
+                  <SelectItem value="completed">Completado</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button variant="outline" asChild>
-              <Link href="/">Cancel</Link>
+              <Link href="/">Cancelar</Link>
             </Button>
-            <Button type="submit">Create Project</Button>
+            <Button type="submit">Criar Projeto</Button>
           </CardFooter>
         </form>
       </Card>

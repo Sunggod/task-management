@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge"
 import { getProjectMembers } from "@/lib/data"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { PlusCircle } from "lucide-react"
+import { CrownIcon, PlusCircle } from "lucide-react"
 import Link from "next/link"
 
 export default async function ProjectMembers({ projectId }: { projectId: number }) {
@@ -11,11 +11,11 @@ export default async function ProjectMembers({ projectId }: { projectId: number 
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold">Team Members</h2>
+        <h2 className="text-xl font-semibold">Membros do Time</h2>
         <Button variant="outline" size="sm" asChild>
           <Link href={`/projects/${projectId}/members/invite`}>
             <PlusCircle className="mr-2 h-4 w-4" />
-            Invite Member
+            Convidar Membros
           </Link>
         </Button>
       </div>
@@ -31,8 +31,12 @@ export default async function ProjectMembers({ projectId }: { projectId: number 
               <h3 className="font-medium">{member.name}</h3>
               <p className="text-sm text-muted-foreground">{member.email}</p>
             </div>
-            <Badge className="ml-auto" variant={member.role === "owner" ? "default" : "secondary"}>
+      
+            <Badge className="ml-auto  gap-2" variant={member.role === "owner" ? "default" : "secondary"}>
               {member.role}
+              {
+              member.role === "owner" ? <CrownIcon className="w-4 text-yellow-400"/>: ''
+              }
             </Badge>
           </div>
         ))}

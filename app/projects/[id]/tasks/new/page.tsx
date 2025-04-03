@@ -23,48 +23,48 @@ export default async function NewTaskPage({ params }: { params: { id: string } }
     <main className="container max-w-2xl mx-auto py-8 px-4">
       <Card>
         <CardHeader>
-          <CardTitle>Add New Task</CardTitle>
-          <CardDescription>Create a new task for project: {project.name}</CardDescription>
+          <CardTitle>Adicionar nova tarefa</CardTitle>
+          <CardDescription>Crie uma nova tarefa para o projeto {project.name}</CardDescription>
         </CardHeader>
         <form action={createTask}>
           <input type="hidden" name="projectId" value={projectId} />
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Task Title</Label>
-              <Input id="title" name="title" placeholder="Enter task title" required />
+              <Label htmlFor="title">Tarefa Titulo</Label>
+              <Input id="title" name="title" placeholder="Digite o titulo aki" required />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea id="description" name="description" placeholder="Enter task description" rows={3} />
+              <Label htmlFor="description">Descrição</Label>
+              <Textarea id="description" name="description" placeholder="Digite a descrição aki" rows={3} />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="priority">Priority</Label>
+                <Label htmlFor="priority">Prioridade</Label>
                 <Select name="priority" defaultValue="medium">
                   <SelectTrigger>
-                    <SelectValue placeholder="Select priority" />
+                    <SelectValue placeholder="Selecionar Prioridade" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="low">Fácil</SelectItem>
+                    <SelectItem value="medium">Média</SelectItem>
+                    <SelectItem value="high">Díficil</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="dueDate">Due Date</Label>
+                <Label htmlFor="dueDate">Data de vencimento</Label>
                 <Input id="dueDate" name="dueDate" type="date" required defaultValue={getDefaultDueDate()} />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="assigneeId">Assign To</Label>
+              <Label htmlFor="assigneeId">Atribuir a</Label>
               <Select name="assigneeId">
                 <SelectTrigger>
-                  <SelectValue placeholder="Select team member" />
+                  <SelectValue placeholder="Selecione o membro da equipe" />
                 </SelectTrigger>
                 <SelectContent>
                   {members.map((member) => (
@@ -78,9 +78,9 @@ export default async function NewTaskPage({ params }: { params: { id: string } }
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button variant="outline" asChild>
-              <Link href={`/projects/${projectId}`}>Cancel</Link>
+              <Link href={`/projects/${projectId}`}>Cancelar</Link>
             </Button>
-            <Button type="submit">Create Task</Button>
+            <Button type="submit">Criar tarefa</Button>
           </CardFooter>
         </form>
       </Card>
@@ -90,7 +90,7 @@ export default async function NewTaskPage({ params }: { params: { id: string } }
 
 function getDefaultDueDate() {
   const date = new Date()
-  date.setDate(date.getDate() + 7) // Default to 1 week from now
+  date.setDate(date.getDate() + 7)
   return date.toISOString().split("T")[0]
 }
 

@@ -37,7 +37,7 @@ export default async function TaskDetailPage({
         <Button variant="ghost" size="sm" asChild className="mb-4">
           <Link href={`/projects/${projectId}`}>
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Project
+            Voltar ao projeto
           </Link>
         </Button>
 
@@ -62,18 +62,18 @@ export default async function TaskDetailPage({
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h3 className="text-sm font-medium mb-1">Description</h3>
-              <p className="text-sm text-muted-foreground">{task.description || "No description provided."}</p>
+              <h3 className="text-sm font-medium mb-1">Descrição</h3>
+              <p className="text-sm text-muted-foreground">{task.description || "Descrição da task não encontrada."}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
               <div>
-                <h3 className="text-sm font-medium mb-1">Due Date</h3>
+                <h3 className="text-sm font-medium mb-1">Data de vencimento</h3>
                 <p className="text-sm text-muted-foreground">{format(new Date(task.dueDate), "PPP")}</p>
               </div>
 
               <div>
-                <h3 className="text-sm font-medium mb-1">Assignee</h3>
+                <h3 className="text-sm font-medium mb-1">Atribuído</h3>
                 {task.assignee ? (
                   <div className="flex items-center gap-2">
                     <Avatar className="h-6 w-6">
@@ -83,7 +83,8 @@ export default async function TaskDetailPage({
                     <span className="text-sm">{task.assignee.name}</span>
                   </div>
                 ) : (
-                  <p className="text-sm text-muted-foreground">Unassigned</p>
+                  <p className="text-sm text-muted-foreground">Não atribuído
+</p>
                 )}
               </div>
             </div>
@@ -92,12 +93,11 @@ export default async function TaskDetailPage({
             <div className="w-full">
               <h3 className="text-sm font-medium mb-3 flex items-center">
                 <MessageSquare className="mr-2 h-4 w-4" />
-                Comments
+                Comentarios
               </h3>
               <p className="text-sm text-muted-foreground text-center py-6">
-                No comments yet. Be the first to comment!
+              Nenhum comentário ainda. Seja o primeiro a comentar!
               </p>
-              {/* Comment form would go here in a real application */}
             </div>
           </CardFooter>
         </Card>

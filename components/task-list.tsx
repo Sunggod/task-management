@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { formatDistanceToNow } from "date-fns"
 import { updateTaskStatus } from "@/lib/actions"
 import Link from "next/link"
+import { getColorPriority } from "@/utils/priorityColors"
 
 export default async function TaskList({ projectId }: { projectId: number }) {
   const tasks = await getTasksByProjectId(projectId)
@@ -12,8 +13,8 @@ export default async function TaskList({ projectId }: { projectId: number }) {
   if (tasks.length === 0) {
     return (
       <div className="text-center py-10">
-        <h3 className="text-lg font-medium mb-2">No tasks found</h3>
-        <p className="text-muted-foreground">Add your first task to get started.</p>
+        <h3 className="text-lg font-medium mb-2">Não possui taks</h3>
+        <p className="text-muted-foreground">Adicione sua primeira task para iniciar</p>
       </div>
     )
   }
@@ -21,12 +22,12 @@ export default async function TaskList({ projectId }: { projectId: number }) {
   return (
     <div className="space-y-4">
       {tasks.map((task) => (
-        <div key={task.id} className="flex items-start p-4 border rounded-lg hover:bg-gray-50">
+        <div key={task.id} className="flex items-start p-4 border rounded-lg hover:scale-105 transition-all animate-in animate-out duration-500">
           <form action={updateTaskStatus}>
             <input type="hidden" name="taskId" value={task.id} />
             <input type="hidden" name="completed" value={task.completed ? "false" : "true"} />
             <Checkbox id={`task-${task.id}`} checked={task.completed} className="mt-1 mr-3" />
-          </form>
+          </form> 
 
           <div className="flex-1">
             <Link href={`/projects/${projectId}/tasks/${task.id}`} className="block">
@@ -35,9 +36,9 @@ export default async function TaskList({ projectId }: { projectId: number }) {
               </h3>
               <p className="text-sm text-muted-foreground mt-1">{task.description}</p>
               <div className="flex items-center gap-2 mt-2">
-                <Badge variant="outline">{task.priority}</Badge>
+                <Badge className={`${getColorPriority(task.priority)}`} variant="outline">{task.priority}</Badge>
                 <span className="text-xs text-muted-foreground">
-                  Due {formatDistanceToNow(new Date(task.dueDate), { addSuffix: true })}
+                  Vencimento {formatDistanceToNow(new Date(task.dueDate), { addSuffix: true })}
                 </span>
               </div>
             </Link>
@@ -63,4 +64,3 @@ function getInitials(name: string): string {
     .toUpperCase()
     .substring(0, 2)
 }
-

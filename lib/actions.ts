@@ -1,27 +1,31 @@
 "use server"
 
+import { db } from "./db"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-import { mockTasks, mockProjects } from "./mock-data"
 
 export async function updateTaskStatus(formData: FormData) {
   const taskId = formData.get("taskId") as string
   const completed = formData.get("completed") === "true"
 
   try {
-    // Find the task and its project
-    const task = mockTasks.find((t) => t.id === Number.parseInt(taskId))
+    // Get the project ID for the task
+    const [task] = await db.select("project_id").from("tasks").where("id", Number.parseInt(taskId))
 
     if (!task) {
       throw new Error("Task not found")
     }
 
-    // In a real app, this would update the database
-    // For mock data, we'll just update the in-memory object
-    task.completed = completed
+    // Update the task status
+    await db("tasks")
+      .where("id", Number.parseInt(taskId))
+      .update({
+        completed: completed ? 1 : 0,
+        updated_at: new Date(),
+      })
 
     // Revalidate the project page
-    revalidatePath(`/projects/${task.projectId}`)
+    revalidatePath(`/projects/${task.project_id}`)
   } catch (error) {
     console.error("Error updating task status:", error)
   }
@@ -33,25 +37,30 @@ export async function createProject(formData: FormData) {
   const status = formData.get("status") as string
 
   try {
-    // In a real app, this would insert into the database
-    // For mock data, we'll just create a new project with the next ID
-    const newId = Math.max(...mockProjects.map((p) => p.id)) + 1
-
-    const newProject = {
-      id: newId,
+    // Insert the new project
+    const [projectId] = await db("projects").insert({
       name,
       description,
       status,
-      progress: 0,
-      memberCount: 1,
-      updatedAt: new Date().toISOString(),
-    }
+      created_at: new Date(),
+      updated_at: new Date(),
+    })
 
-    mockProjects.push(newProject)
+    // Add the current user as the project owner
+    // In a real app, you would get the user ID from the session
+    const userId = 1 // Placeholder for the current user ID
 
-    redirect(`/projects/${newId}`)
+    await db("project_members").insert({
+      project_id: projectId,
+      user_id: userId,
+      role: "owner",
+      created_at: new Date(),
+    })
+
+    redirect(`/projects/${projectId}`)
   } catch (error) {
     console.error("Error creating project:", error)
+    // In a real app, you would handle the error and show a message to the user
   }
 }
 
@@ -64,32 +73,22 @@ export async function createTask(formData: FormData) {
   const assigneeId = formData.get("assigneeId") as string
 
   try {
-    // In a real app, this would insert into the database
-    // For mock data, we'll just create a new task with the next ID
-    const newId = Math.max(...mockTasks.map((t) => t.id)) + 1
-
-    const newTask = {
-      id: newId,
-      projectId,
+    await db("tasks").insert({
+      project_id: projectId,
       title,
       description,
-      completed: false,
-      priority: priority as "low" | "medium" | "high",
-      dueDate,
-      assignee: assigneeId
-        ? {
-            id: Number.parseInt(assigneeId),
-            name: "Assigned User", // In a real app, we would look up the user's name
-            avatar: "/placeholder.svg?height=40&width=40",
-          }
-        : undefined,
-    }
-
-    mockTasks.push(newTask)
+      priority,
+      due_date: dueDate,
+      assignee_id: assigneeId ? Number.parseInt(assigneeId) : null,
+      completed: 0,
+      created_at: new Date(),
+      updated_at: new Date(),
+    })
 
     redirect(`/projects/${projectId}`)
   } catch (error) {
     console.error("Error creating task:", error)
+    // In a real app, you would handle the error and show a message to the user
   }
 }
 

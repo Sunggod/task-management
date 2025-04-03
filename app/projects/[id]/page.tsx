@@ -9,6 +9,7 @@ import TaskList from "@/components/task-list"
 import ProjectMembers from "@/components/project-members"
 import { PlusCircle } from "lucide-react"
 import Link from "next/link"
+import { getBadgeStatusColor } from "@/utils/statusColors"
 
 export default async function ProjectPage({ params }: { params: { id: string } }) {
   const project = await getProjectById(Number.parseInt(params.id))
@@ -23,26 +24,26 @@ export default async function ProjectPage({ params }: { params: { id: string } }
         <div>
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-bold">{project.name}</h1>
-            <Badge variant={getStatusVariant(project.status)}>{project.status}</Badge>
+            <Badge className={`${getBadgeStatusColor(project.status)}`} variant={getStatusVariant(project.status)}>{project.status}</Badge>
           </div>
           <p className="text-muted-foreground mt-1">{project.description}</p>
         </div>
         <Button asChild>
           <Link href={`/projects/${project.id}/tasks/new`}>
             <PlusCircle className="mr-2 h-4 w-4" />
-            Add Task
+            Adicionar Tarefa
           </Link>
         </Button>
       </div>
 
       <div className="mb-6 w-full bg-gray-100 rounded-full h-2.5">
-        <div className="bg-primary h-2.5 rounded-full" style={{ width: `${project.progress}%` }}></div>
+        <div className="bg-primary h-2.5 rounded-full dark:bg-blue-400" style={{ width: `${project.progress}%` }}></div>
       </div>
 
       <Tabs defaultValue="tasks">
         <TabsList className="mb-6">
-          <TabsTrigger value="tasks">Tasks</TabsTrigger>
-          <TabsTrigger value="members">Members</TabsTrigger>
+          <TabsTrigger value="tasks">Tarefas</TabsTrigger>
+          <TabsTrigger value="members">Membros</TabsTrigger>
         </TabsList>
         <TabsContent value="tasks">
           <Suspense fallback={<TaskSkeleton />}>
@@ -62,9 +63,9 @@ function getStatusVariant(status: string) {
     case "active":
       return "default"
     case "completed":
-      return "success"
+      return "outline"
     case "on hold":
-      return "warning"
+      return "destructive"
     default:
       return "secondary"
   }
